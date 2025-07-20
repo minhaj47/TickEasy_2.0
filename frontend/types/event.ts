@@ -24,17 +24,7 @@ export interface CreateEventBody {
   organizationId: string;
 }
 
-export interface Organization {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  websiteUrl: string;
-  logoUrl: string;
-}
-
-export interface EventDTO {
+export interface EventDetails {
   id: string;
   title: string;
   description: string;
@@ -46,8 +36,21 @@ export interface EventDTO {
   ticketPrice?: number;
   maxTickets: number;
   isPublic: boolean;
-  organization: Organization;
   ticketCount: number;
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  websiteUrl: string;
+  logoUrl: string;
+}
+
+export interface EventDTO extends EventDetails {
+  organization: Organization;
 }
 
 export interface EventResponse {

@@ -59,9 +59,9 @@ export default function LoginForm() {
         const info = await login(data.token);
 
         if (info.role === Role.ORGANIZER) {
-          router.push("/dashboard");
+          router.replace("/dashboard");
         } else {
-          router.push("/user-dashboard");
+          router.replace("/user-dashboard");
         }
 
         setFormData({ email: "", password: "" });

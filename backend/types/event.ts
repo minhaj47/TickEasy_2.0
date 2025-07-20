@@ -29,16 +29,18 @@ export interface EventDetails {
   ticketCount: number;
 }
 
+export interface Organization {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  websiteUrl: string;
+  logoUrl: string;
+}
+
 export interface EventDTO extends EventDetails {
-  organization: {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    websiteUrl: string;
-    logoUrl: string;
-  };
+  organization: Organization;
 }
 
 export interface EventResponse {

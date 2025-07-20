@@ -5,7 +5,6 @@ import {
   Clock,
   DollarSign,
   Eye,
-  Loader,
   MapPin,
   MoreVertical,
   Plus,
@@ -27,38 +26,10 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { EventDetails } from "../../../types/event";
+import { OrgDTO, OrgResponse } from "../../../types/user";
 import { useAuth } from "../auth/context";
-// Types based on your API response
-interface EventDetails {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  category: string;
-  startTime: Date;
-  endTime: Date;
-  location?: string;
-  ticketPrice?: number;
-  maxTickets: number;
-  isPublic: boolean;
-  ticketCount: number;
-}
-
-interface OrgDTO {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  websiteUrl: string;
-  logoUrl: string;
-  events: EventDetails[];
-}
-
-interface OrgResponse {
-  org: OrgDTO;
-  message: string;
-}
+import LoadingIndicator from "../loading";
 
 // Mock data for missing API data (revenue trend, etc.)
 const mockRevenueData = [
@@ -295,7 +266,12 @@ export default function ModernDashboard() {
         }
 
         const data: OrgResponse = await response.json();
-        setOrgData(data.org);
+
+        if (!data.org) {
+          setError("Organization not found");
+        } else {
+          setOrgData(data.org);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
@@ -380,14 +356,7 @@ export default function ModernDashboard() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50 flex items-center justify-center">
-        <div className="text-center">
-          <Loader className="w-12 h-12 text-indigo-600 animate-spin mx-auto mb-4" />
-          <p className="text-xl text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    );
+    return <LoadingIndicator />;
   }
 
   if (error || !orgData) {
