@@ -90,7 +90,7 @@ const Navigation = () => {
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-20">
                     <div className="py-2">
                       <button
-                        onClick={() => router.push("/auth/register?type=user")}
+                        onClick={() => router.push("/auth/register-user")}
                         className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition"
                       >
                         <div className="font-medium text-gray-900">
@@ -102,9 +102,7 @@ const Navigation = () => {
                       </button>
                       <div className="border-t border-gray-100" />
                       <button
-                        onClick={() =>
-                          router.push("/auth/register?type=organizer")
-                        }
+                        onClick={() => router.push("/auth/register")}
                         className="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition"
                       >
                         <div className="font-medium text-gray-900">

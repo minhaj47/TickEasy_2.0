@@ -185,7 +185,10 @@ export default function UserDashboard() {
             <p className="text-gray-600 mb-6">
               You haven't purchased any tickets yet. Start exploring events!
             </p>
-            <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition">
+            <button
+              onClick={() => router.push(`/#events`)}
+              className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
+            >
               Browse Events
             </button>
           </div>
