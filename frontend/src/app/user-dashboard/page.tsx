@@ -208,7 +208,8 @@ export default function UserDashboard() {
               No Tickets Yet
             </h2>
             <p className="text-gray-600 mb-6">
-              You haven't purchased any tickets yet. Start exploring events!
+              You haven&apos;t purchased any tickets yet. Start exploring
+              events!
             </p>
             <button
               onClick={() => router.push(`/#events`)}
