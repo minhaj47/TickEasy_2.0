@@ -130,7 +130,11 @@ export class TicketController {
           event: {
             include: {
               organization: true,
-              tickets: true,
+              _count: {
+                select: {
+                  tickets: true,
+                },
+              },
             },
           },
         },
@@ -143,8 +147,6 @@ export class TicketController {
           error: 'Ticket does not exist',
         });
       }
-
-      console.log(ticket);
 
       // Transform to match frontend DTO structure
       const ticketDTO: TicketDTO = {
@@ -179,7 +181,7 @@ export class TicketController {
             websiteUrl: ticket.event.organization.websiteUrl,
             logoUrl: ticket.event.organization.logoUrl,
           },
-          ticketCount: ticket.event.tickets.length,
+          ticketCount: ticket.event._count.tickets,
         },
         createdAt: ticket.createdAt,
       };

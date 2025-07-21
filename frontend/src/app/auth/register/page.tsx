@@ -1,6 +1,5 @@
 "use client";
 import {
-  Building2,
   CheckCircle,
   Eye,
   EyeOff,
@@ -10,6 +9,7 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
+import Link from "next/link";
 import React, { useState } from "react";
 import { CreateOrganizationBody } from "../../../../types/organization";
 
@@ -66,7 +66,6 @@ export default function OrganizationCreateForm() {
       });
 
       const data = await response.json();
-      console.log(data);
 
       if (!response.ok) {
         setError(data.message || "Registration failed");
@@ -144,13 +143,34 @@ export default function OrganizationCreateForm() {
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           {/* Form Header */}
           <div className="bg-gray-50 px-8 py-6 border-b border-gray-200">
-            <h2 className="text-2xl font-semibold text-gray-800 flex items-center">
-              <Building2 className="w-6 h-6 mr-3 text-indigo-600" />
-              Organization Details
-            </h2>
-            <p className="text-gray-600 mt-2">
-              Fill in the information below to create your organization profile
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  Already registered your organization?
+                </h2>
+                <p className="text-gray-600 mt-2">
+                  Just login to access your organization dashboard
+                </p>
+              </div>
+              <div className="hidden sm:block">
+                <Link
+                  href="/auth/login"
+                  className="inline-flex items-center px-6 py-3 bg-white text-indigo-600 border border-indigo-600 font-semibold rounded-lg hover:bg-indigo-200 transition-colors"
+                >
+                  Login Now
+                </Link>
+              </div>
+            </div>
+
+            {/* Mobile version */}
+            <div className="sm:hidden mt-4">
+              <Link
+                href="/auth/login"
+                className="block w-full text-center px-6 py-3 bg-white text-indigo-600 border border-indigo-600 font-semibold rounded-lg hover:bg-indigo-200 transition-colors"
+              >
+                Login Now
+              </Link>
+            </div>
           </div>
 
           {/* Error Message */}

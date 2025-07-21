@@ -252,7 +252,6 @@ export default function ModernDashboard() {
   useEffect(() => {
     const fetchOrgData = async () => {
       try {
-        console.log(info);
         setLoading(true);
         if (!info?.id) {
           throw new Error("User ID not found");

@@ -1,6 +1,7 @@
 "use client";
 
 import { Eye, EyeOff, Mail } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { LoginBody } from "../../../../types/organization";
@@ -88,12 +89,34 @@ export default function RegisterUserForm() {
       <div className="max-w-xl mx-auto px-4 py-12">
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           <div className="bg-gray-50 px-8 py-6 border-b border-gray-200">
-            <h2 className="text-2xl font-semibold text-gray-800">
-              Register User
-            </h2>
-            <p className="text-gray-600 mt-2">
-              Simple Registration: Just Provide your mail and password.
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  Already have an account?
+                </h2>
+                <p className="text-gray-600 mt-2">
+                  Just login to access your dashboard
+                </p>
+              </div>
+              <div className="hidden sm:block">
+                <Link
+                  href="/auth/login"
+                  className="inline-flex items-center px-6 py-3 bg-white text-indigo-600 border border-indigo-600 font-semibold rounded-lg hover:bg-indigo-200 transition-colors"
+                >
+                  Login Now
+                </Link>
+              </div>
+            </div>
+
+            {/* Mobile version */}
+            <div className="sm:hidden mt-4">
+              <Link
+                href="/auth/login"
+                className="block w-full text-center px-6 py-3 bg-white text-indigo-600 border border-indigo-600 font-semibold rounded-lg hover:bg-indigo-200 transition-colors"
+              >
+                Login Now
+              </Link>
+            </div>
           </div>
 
           {error && (

@@ -43,16 +43,16 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
     useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [formErrors, setFormErrors] = useState<Partial<CreateTicketBody>>({});
+  const [ticketId, setTicketId] = useState<string | null>(null);
+  const { info, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState<CreateTicketBody>({
-    buyerName: "",
-    buyerEmail: "",
+    buyerName: info?.name || "",
+    buyerEmail: info?.email || "",
     buyerPhone: "",
     paymentMethod: "",
     paymentId: "",
   });
-  const [formErrors, setFormErrors] = useState<Partial<CreateTicketBody>>({});
-  const [ticketId, setTicketId] = useState<string | null>(null);
-  const { info, isAuthenticated } = useAuth();
   const router = useRouter();
   useEffect(() => {
     const fetchEvent = async (): Promise<void> => {
@@ -210,8 +210,8 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
 
       // Reset form
       setFormData({
-        buyerName: "",
-        buyerEmail: "",
+        buyerName: info?.name || "",
+        buyerEmail: info?.email || "",
         buyerPhone: "",
         paymentMethod: "",
         paymentId: "",
@@ -490,19 +490,38 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
 
                 {/* Registration Button */}
                 {registrationSuccess && ticketId ? (
-                  <div className="text-center p-4 bg-green-50 rounded-xl border border-green-200">
-                    <div className="text-green-600 font-semibold mb-2">
-                      Registration Successful!
+                  <div className="text-center p-6 bg-green-50 rounded-xl border border-green-200">
+                    <div className="text-green-600 font-semibold mb-3 text-lg">
+                      ✅ Registration Successful!
                     </div>
-                    <p className="text-sm text-green-600 mb-4">
-                      Check your email for confirmation details.
-                    </p>
-                    <a
-                      href={`/tickets/${ticketId}`}
-                      className="inline-block px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition"
-                    >
-                      View Your Ticket
-                    </a>
+
+                    <div className="text-sm text-green-700 mb-6 leading-relaxed">
+                      <p className="mb-3">
+                        <strong>What happens next?</strong>
+                      </p>
+                      <ol className="list-decimal list-inside space-y-2 text-left max-w-md mx-auto">
+                        <li>
+                          Wait a few moments while we confirm your payment.
+                        </li>
+                        <li>
+                          Once confirmed, you will receive your ticket via
+                          email.
+                        </li>
+                        <li>
+                          You can register and log in to check your tickets,
+                          ticket status and download them.
+                        </li>
+                      </ol>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <button
+                        onClick={() => router.push("/auth/register-user")}
+                        className="px-6 py-2 bg-white text-green-600 border border-green-600 rounded-lg font-semibold hover:bg-green-200 transition"
+                      >
+                        Register
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <button
@@ -521,13 +540,25 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
                 {/* Additional Info */}
                 <div className="mt-6 p-4 bg-violet-50 rounded-xl border border-violet-100">
                   <h4 className="font-semibold text-violet-800 mb-2">
-                    What's Included
+                    How to confirm your seat?
                   </h4>
-                  <ul className="text-sm text-violet-700 space-y-1">
-                    <li>• Workshop materials</li>
-                    <li>• Certificate of completion</li>
-                    <li>• Networking opportunities</li>
-                    <li>• Refreshments</li>
+                  <ul className="text-sm text-violet-700 space-y-2">
+                    <li>
+                      • <strong>Buy your ticket</strong> - Purchase directly
+                      without needing to create an account
+                    </li>
+                    <li>
+                      • <strong>Complete payment</strong> - Finish your payment
+                      and wait for confirmation
+                    </li>
+                    <li>
+                      • <strong>Check your email</strong> - Your basic ticket
+                      will be sent once payment is confirmed
+                    </li>
+                    <li>
+                      • <strong>Create account (optional)</strong> - Register
+                      and login to view all ticket details and manage bookings
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -555,20 +586,72 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
 
             {/* Modal Content */}
             <div className="p-6">
-              {/* Event Summary */}
+              {/* Payment Options */}
               <div className="mb-6 p-4 bg-violet-50 rounded-xl border border-violet-100">
-                <h4 className="font-semibold text-violet-800 mb-2">
-                  {event.title}
+                <h4 className="font-semibold text-violet-800 mb-3">
+                  Payment Options (Send Money)
                 </h4>
-                <p className="text-sm text-violet-700 mb-1">
-                  {weekday}, {fullDate}
-                </p>
-                <p className="text-sm text-violet-700 mb-2">
-                  {startTime} - {endTime}
-                </p>
-                <p className="text-lg font-bold text-violet-800">
-                  {event.ticketPrice ? `৳${event.ticketPrice}` : "Free"}
-                </p>
+
+                {/* Mobile Banking Numbers */}
+                <div className="mb-4">
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <span className="font-semibold text-violet-800">
+                        bKash:
+                      </span>
+                      <span className="text-violet-700">01712-345678</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-semibold text-violet-800">
+                        Rocket:
+                      </span>
+                      <span className="text-violet-700">01812-345678</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-semibold text-violet-800">
+                        Nagad:
+                      </span>
+                      <span className="text-violet-700">01912-345678</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="font-semibold text-violet-800">
+                        Cellfin:
+                      </span>
+                      <span className="text-violet-700">01612-345678</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Instructions */}
+                <div className="space-y-2 text-sm text-violet-700">
+                  <p>
+                    <strong>Step 1:</strong> Pay Tk.{event.ticketPrice} using
+                    any mobile banking service above
+                  </p>
+                  <p>
+                    <strong>Step 2:</strong> Fill up the form with your{" "}
+                    <span className="font-semibold text-violet-800">
+                      valid transaction ID
+                    </span>
+                  </p>
+                  <p>
+                    <strong>Step 3:</strong> Wait for payment confirmation. Once
+                    confirmed we will send you a ticket via email.
+                  </p>
+                  <p>
+                    <strong>Step 4:</strong> Register and login to check status
+                    and access all your tickets
+                  </p>
+                </div>
+
+                {/* Important Note */}
+                <div className="mt-3 p-2 bg-violet-100 rounded-lg">
+                  <p className="text-xs text-violet-600">
+                    ⚠️ <strong>Important:</strong> Please provide a valid
+                    transaction ID. For Cash Payment Provide enough details for
+                    easy recognition.
+                  </p>
+                </div>
               </div>
 
               {/* Registration Form */}

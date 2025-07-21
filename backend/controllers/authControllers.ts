@@ -222,10 +222,10 @@ class AuthController {
       }
 
       const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
-      console.log(decoded);
 
       return res.status(200).json({
         message: 'Token verified',
+        decoded,
       });
     } catch (error) {
       console.error('Error in verifyToken:', error);
