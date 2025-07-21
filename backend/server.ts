@@ -10,7 +10,10 @@ const port = 5001;
 // middleware
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: [
+      'http://localhost:3000',
+      'https://event-grid-2-0-git-main-md-minhajul-haques-projects.vercel.app',
+    ],
     credentials: true,
   })
 );
