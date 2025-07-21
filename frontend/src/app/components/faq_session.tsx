@@ -7,7 +7,7 @@ const FAQItem = ({
   isExpanded,
   onToggle,
 }: {
-  faq: any;
+  faq: { question: string; answer: string };
   index: number;
   isExpanded: boolean;
   onToggle: (index: number) => void;
@@ -82,7 +82,11 @@ const FAQIllustration = () => {
 };
 
 // FAQ Section Component
-const FAQSection = ({ faqs }: { faqs: any }) => {
+const FAQSection = ({
+  faqs,
+}: {
+  faqs: { question: string; answer: string }[];
+}) => {
   const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null);
 
   const toggleFAQ = (index: number) => {
@@ -107,7 +111,7 @@ const FAQSection = ({ faqs }: { faqs: any }) => {
             </div>
 
             <div className="space-y-0">
-              {faqs.map((faq: any, index: number) => (
+              {faqs.map((faq, index) => (
                 <FAQItem
                   key={index}
                   faq={faq}

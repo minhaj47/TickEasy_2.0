@@ -262,7 +262,7 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
             Event not found
           </h3>
           <p className="text-gray-600">
-            The event you're looking for doesn't exist.
+            The event you&apos;re looking for doesn&apos;t exist.
           </p>
         </div>
       </div>

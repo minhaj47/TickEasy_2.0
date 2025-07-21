@@ -30,7 +30,7 @@ const EventsSection = () => {
   const [events, setEvents] = useState<EventDTO[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState<any | null>(null);
+  // const [pagination, setPagination] = useState<any | null>(null);
   const [filters, setFilters] = useState({
     page: 1,
     limit: 12,
@@ -55,7 +55,7 @@ const EventsSection = () => {
 
       if (data.success) {
         setEvents(data.events || []);
-        setPagination(data.pagination);
+        // setPagination(data.pagination);
       } else {
         throw new Error(data.message || "Failed to fetch events");
       }

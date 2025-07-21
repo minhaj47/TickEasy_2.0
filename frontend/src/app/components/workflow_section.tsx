@@ -77,8 +77,9 @@ const WorkflowSection = () => {
             </span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Whether you're booking tickets on the go, managing your collection,
-            or creating events - we've made it incredibly simple for everyone.
+            Whether you&apos;re booking tickets on the go, managing your
+            collection, or creating events - we&apos;ve made it incredibly
+            simple for everyone.
           </p>
         </div>
 

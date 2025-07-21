@@ -48,7 +48,11 @@ const features = [
   },
 ];
 
-const FeatureCard = ({ feature }: { feature: any }) => {
+const FeatureCard = ({
+  feature,
+}: {
+  feature: { icon: React.ReactNode; title: string; description: string };
+}) => {
   return (
     <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
       <div className="flex items-center mb-4">
@@ -85,7 +89,7 @@ const FeaturesSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature: any, index: number) => (
+          {features.map((feature, index) => (
             <FeatureCard key={index} feature={feature} />
           ))}
         </div>
