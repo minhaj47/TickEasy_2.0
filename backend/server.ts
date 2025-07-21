@@ -13,6 +13,7 @@ app.use(
     origin: [
       'http://localhost:3000',
       'https://event-grid-2-0-git-main-md-minhajul-haques-projects.vercel.app',
+      'https://event-grid-2-0.vercel.app',
     ],
     credentials: true,
   })
