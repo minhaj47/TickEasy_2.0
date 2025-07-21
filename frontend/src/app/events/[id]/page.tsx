@@ -58,7 +58,7 @@ export default function EventDetailsPage() {
         setError(null);
 
         const response = await fetch(
-          `http://localhost:5001/api/events/${eventId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/events/${eventId}`
         );
 
         if (!response.ok) {
@@ -182,7 +182,7 @@ export default function EventDetailsPage() {
       };
 
       const response = await fetch(
-        `http://localhost:5001/api/tickets/${eventId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tickets/${eventId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
