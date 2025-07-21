@@ -1,8 +1,9 @@
 "use client";
 import { useAuth } from "@/app/auth/context";
+import ErrorDisplay from "@/app/error";
 import LoadingIndicator from "@/app/loading";
+import { useToast } from "@/app/toast";
 import {
-  AlertCircle,
   ArrowLeft,
   Clock,
   ExternalLink,
@@ -45,6 +46,7 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<Partial<CreateTicketBody>>({});
   const [ticketId, setTicketId] = useState<string | null>(null);
+  const { showToast } = useToast();
   const { info, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState<CreateTicketBody>({
     buyerName: info?.name || "",
@@ -166,7 +168,10 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
     if (!validateForm()) return;
 
     if (isAuthenticated && info?.role == Role.ORGANIZER) {
-      setError("You are not authorized to register for this event");
+      showToast(
+        "Log out first as organizer to register for this event",
+        "error"
+      );
       return;
     }
 
@@ -181,8 +186,6 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
         userId: info?.id,
       };
 
-      console.log("Ticket data to send:", ticketData);
-
       const response = await fetch(
         `http://localhost:5001/api/tickets/${eventId}`,
         {
@@ -191,21 +194,18 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
           body: JSON.stringify(ticketData),
         }
       );
-
-      if (!response.ok) {
-        setError("Registration failed. Please try again.");
-        console.error("Registration failed:", response.statusText);
-        throw new Error(`Failed to register: ${response.status}`);
-      }
-
       const data: TicketResponse = await response.json();
 
-      if (data.success && data.ticketId) {
+      if (response.ok && data.ticketId) {
         setRegistrationSuccess(true);
         setTicketId(data.ticketId);
         setShowModal(false);
       } else {
-        setError(data.error || "Registration failed. Please try again.");
+        showToast(
+          data.message || "Registration failed. Please try again.",
+          "error"
+        );
+        console.error("Registration failed:", data.message);
       }
 
       // Reset form
@@ -218,7 +218,7 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
       });
     } catch (err) {
       console.error("Registration failed:", err);
-      setError("Registration failed. Please try again.");
+      showToast("Registration failed. Please try again.", "error");
     } finally {
       setIsRegistering(false);
     }
@@ -251,23 +251,7 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
   }
 
   if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            Something went wrong
-          </h3>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
+    <ErrorDisplay error={error} />;
   }
 
   if (!event) {
@@ -516,10 +500,16 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
 
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <button
-                        onClick={() => router.push("/auth/register-user")}
+                        onClick={() =>
+                          router.push(
+                            isAuthenticated
+                              ? "/user-dashboard"
+                              : "/auth/register-user"
+                          )
+                        }
                         className="px-6 py-2 bg-white text-green-600 border border-green-600 rounded-lg font-semibold hover:bg-green-200 transition"
                       >
-                        Register
+                        {isAuthenticated ? "Go to Dashboard" : "Register"}
                       </button>
                     </div>
                   </div>

@@ -43,7 +43,9 @@ const EventsSection = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("http://localhost:5001/api/events/all");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/events/all`
+      );
 
       if (!response.ok) {
         throw new Error(`Failed to fetch events: ${response.status}`);

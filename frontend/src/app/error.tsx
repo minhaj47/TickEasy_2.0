@@ -77,7 +77,7 @@ function ErrorDisplay({
         <div className="space-y-3">
           {showBackButton && (
             <button
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-teal-200"
+              className="w-full bg-white hover:bg-indigo-300 text-black border border-indigo-600 font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-indigo-200"
               onClick={() => router.back()}
             >
               <span className="flex items-center justify-center">
@@ -137,6 +137,4 @@ function ErrorDisplay({
     </div>
   );
 }
-
-// Default export for Next.js error pages it should not be named Export
 export default ErrorDisplay;

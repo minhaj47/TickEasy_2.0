@@ -257,7 +257,7 @@ export default function ModernDashboard() {
           throw new Error("User ID not found");
         }
         const response = await fetch(
-          `http://localhost:5001/api/users/org/${info?.id}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/org/${info?.id}`
         );
 
         if (!response.ok) {

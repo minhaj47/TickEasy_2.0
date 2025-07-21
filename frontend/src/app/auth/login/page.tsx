@@ -32,13 +32,16 @@ export default function LoginForm() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:5001/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        mode: "cors",
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          mode: "cors",
+          credentials: "include",
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
 
@@ -78,10 +81,29 @@ export default function LoginForm() {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-12">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">Login</h1>
-          <p className="text-xl text-indigo-100">Access your dashboard</p>
+      <div className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-9 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]"></div>
+        <div className="absolute top-10 right-20 w-32 h-32 bg-purple-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 left-20 w-40 h-40 bg-indigo-400/10 rounded-full blur-3xl"></div>
+
+        <div className="max-w-4xl mx-auto px-6 text-center relative">
+          {/* Status Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-800/40 text-indigo-100 rounded-full text-sm font-medium border border-indigo-700/30 mb-4">
+            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+            Secure Login
+          </div>
+
+          {/* Main Heading */}
+          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-white via-indigo-100 to-purple-100 bg-clip-text text-transparent tracking-tight">
+            Welcome Back
+          </h1>
+
+          {/* Subtitle */}
+          <p className="text-lg text-indigo-200 font-medium mb-6 max-w-2xl mx-auto leading-relaxed">
+            Sign in to access your personalized dashboard and manage your
+            tickets
+          </p>
         </div>
       </div>
 

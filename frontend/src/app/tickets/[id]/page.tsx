@@ -21,7 +21,9 @@ export default function TicketPage() {
 
   useEffect(() => {
     const fetchTicket = async () => {
-      const res = await fetch(`http://localhost:5001/api/tickets/${id}`);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/tickets/${id}`
+      );
       const data: TicketResponse = await res.json();
       if (data.success && data.ticket) setTicket(data.ticket);
     };

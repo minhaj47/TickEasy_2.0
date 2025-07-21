@@ -3,7 +3,6 @@
 import { useAuth } from "@/app/auth/context";
 import {
   Calendar,
-  CheckCircle,
   Clock,
   DollarSign,
   FileText,
@@ -30,12 +29,9 @@ const categories = [
   { value: "OTHER", label: "Other", icon: "📅" },
 ];
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
-
 export default function CreateEventPage() {
   const router = useRouter();
-  const { orgInfo } = useAuth();
+  const { info } = useAuth();
   const { showToast } = useToast();
   const [formData, setFormData] = useState({
     title: "",
@@ -48,26 +44,34 @@ export default function CreateEventPage() {
     endTime: "",
     maxTickets: "",
     isPublic: true,
-    organizationId: orgInfo?.orgId,
+    organizationId: info?.id,
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
+    const newValue = type === "checkbox" ? checked : value;
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: newValue,
     }));
-    if (error) setError("");
+
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData((prev) => ({ ...prev, category: e.target.value }));
-    if (error) setError("");
   };
 
   const createEvent = async (eventData: typeof formData) => {
@@ -93,14 +97,17 @@ export default function CreateEventPage() {
       organizationId: eventData.organizationId,
     };
 
-    const response = await fetch(`${API_BASE_URL}/events/create`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(apiData),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/events/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(apiData),
+      }
+    );
 
     const result = await response.json();
     if (!response.ok) {
@@ -110,33 +117,71 @@ export default function CreateEventPage() {
   };
 
   const validateForm = () => {
-    const errors: string[] = [];
+    const errors: Record<string, string> = {};
 
-    if (!formData.title.trim()) errors.push("Title is required");
-    if (!formData.description.trim()) errors.push("Description is required");
-    if (!formData.imageUrl.trim()) errors.push("Image URL is required");
-    if (!formData.startTime) errors.push("Start time is required");
-    if (!formData.endTime) errors.push("End time is required");
-    if (!formData.maxTickets) errors.push("Maximum tickets is required");
+    if (!formData.title.trim()) {
+      errors.title = "Title is required";
+    }
+
+    if (!formData.description.trim()) {
+      errors.description = "Description is required";
+    }
+
+    if (!formData.imageUrl.trim()) {
+      errors.imageUrl = "Image URL is required";
+    } else {
+      // Basic URL validation
+      try {
+        new URL(formData.imageUrl);
+      } catch {
+        errors.imageUrl = "Please enter a valid URL";
+      }
+    }
+
+    if (!formData.startTime) {
+      errors.startTime = "Start time is required";
+    }
+
+    if (!formData.endTime) {
+      errors.endTime = "End time is required";
+    }
+
+    if (!formData.maxTickets) {
+      errors.maxTickets = "Maximum tickets is required";
+    }
 
     if (formData.startTime && formData.endTime) {
       const startDate = new Date(formData.startTime);
       const endDate = new Date(formData.endTime);
       const now = new Date();
 
-      if (startDate <= now) errors.push("Start time must be in the future");
-      if (endDate <= startDate)
-        errors.push("End time must be after start time");
+      if (startDate <= now) {
+        errors.startTime = "Start time must be in the future";
+      }
+
+      if (endDate <= startDate) {
+        errors.endTime = "End time must be after start time";
+      }
     }
 
     if (formData.maxTickets && parseInt(formData.maxTickets) <= 0) {
-      errors.push("Maximum tickets must be greater than 0");
+      errors.maxTickets = "Maximum tickets must be greater than 0";
     }
+
     if (formData.ticketPrice && parseFloat(formData.ticketPrice) < 0) {
-      errors.push("Ticket price cannot be negative");
+      errors.ticketPrice = "Ticket price cannot be negative";
     }
 
     return errors;
+  };
+
+  const getInputClassName = (fieldName: string, baseClassName: string) => {
+    const hasError = !!fieldErrors[fieldName];
+    return `${baseClassName} ${
+      hasError
+        ? "border-red-500 focus:ring-red-500 focus:border-red-500"
+        : "border-gray-200 focus:ring-indigo-500 focus:border-indigo-500"
+    }`;
   };
 
   const handleSubmit = async (e: React.MouseEvent) => {
@@ -144,58 +189,28 @@ export default function CreateEventPage() {
     if (loading) return;
 
     const validationErrors = validateForm();
-    if (validationErrors.length > 0) {
-      setError(validationErrors.join(", "));
+    if (Object.keys(validationErrors).length > 0) {
+      setFieldErrors(validationErrors);
+      showToast("Please fix the errors in the form", "error");
       return;
     }
 
-    setError("");
+    setFieldErrors({});
     setLoading(true);
 
     try {
       await createEvent(formData);
-      setIsSuccess(true);
-      showToast("Event created successfully", "success");
-      setTimeout(() => router.push("/dashboard/my-events"), 1000);
+      showToast("Event created successfully!", "success");
+      setTimeout(() => router.push("/dashboard"), 1500);
     } catch (err) {
-      setError(
+      const errorMessage =
         err instanceof Error
           ? err.message
-          : "Failed to create event. Please try again."
-      );
+          : "Failed to create event. Please try again.";
+      showToast(errorMessage, "error");
       setLoading(false);
     }
   };
-
-  const isFormValid =
-    formData.title.trim() &&
-    formData.description.trim() &&
-    formData.imageUrl.trim() &&
-    formData.startTime &&
-    formData.endTime &&
-    formData.maxTickets;
-
-  if (isSuccess) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-4">
-        <div className="max-w-md w-full text-center">
-          <div className="bg-green-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-10 h-10 text-green-500" />
-          </div>
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            Event Created Successfully!
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Your event has been created and is now live. Redirecting to your
-            events dashboard...
-          </p>
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg font-medium inline-block">
-            Redirecting...
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -222,13 +237,6 @@ export default function CreateEventPage() {
             </p>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
-          )}
-
           {/* Form Content */}
           <div className="p-8 space-y-6">
             {/* Title and Category */}
@@ -244,10 +252,18 @@ export default function CreateEventPage() {
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full text-gray-700 pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className={getInputClassName(
+                      "title",
+                      "w-full text-gray-700 pl-12 pr-4 py-3 border rounded-lg focus:ring-2"
+                    )}
                     placeholder="Enter your event title"
                   />
                 </div>
+                {fieldErrors.title && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {fieldErrors.title}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -281,9 +297,17 @@ export default function CreateEventPage() {
                 value={formData.description}
                 onChange={handleChange}
                 rows={4}
-                className="w-full text-gray-700 px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+                className={getInputClassName(
+                  "description",
+                  "w-full text-gray-700 px-4 py-3 border rounded-lg focus:ring-2 resize-none"
+                )}
                 placeholder="Tell people what your event is about..."
               />
+              {fieldErrors.description && (
+                <p className="mt-1 text-sm text-red-600">
+                  {fieldErrors.description}
+                </p>
+              )}
             </div>
 
             {/* Image URL and Location */}
@@ -299,10 +323,18 @@ export default function CreateEventPage() {
                     name="imageUrl"
                     value={formData.imageUrl}
                     onChange={handleChange}
-                    className="w-full text-gray-700 pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className={getInputClassName(
+                      "imageUrl",
+                      "w-full text-gray-700 pl-12 pr-4 py-3 border rounded-lg focus:ring-2"
+                    )}
                     placeholder="https://example.com/image.jpg"
                   />
                 </div>
+                {fieldErrors.imageUrl && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {fieldErrors.imageUrl}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -338,10 +370,18 @@ export default function CreateEventPage() {
                     onChange={handleChange}
                     min="0"
                     step="0.01"
-                    className="w-full text-gray-700 pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className={getInputClassName(
+                      "ticketPrice",
+                      "w-full text-gray-700 pl-12 pr-4 py-3 border rounded-lg focus:ring-2"
+                    )}
                     placeholder="0.00 (leave empty for free)"
                   />
                 </div>
+                {fieldErrors.ticketPrice && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {fieldErrors.ticketPrice}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -356,29 +396,45 @@ export default function CreateEventPage() {
                     value={formData.maxTickets}
                     onChange={handleChange}
                     min="1"
-                    className="w-full text-gray-700 pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className={getInputClassName(
+                      "maxTickets",
+                      "w-full text-gray-700 pl-12 pr-4 py-3 border rounded-lg focus:ring-2"
+                    )}
                     placeholder="100"
                   />
                 </div>
+                {fieldErrors.maxTickets && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {fieldErrors.maxTickets}
+                  </p>
+                )}
               </div>
             </div>
 
-            {/* Start and End Time */}
+            {/* Start and End Time - Made Larger */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Start Date & Time *
                 </label>
                 <div className="relative">
-                  <Clock className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
+                  <Clock className="absolute left-3 top-4 w-5 h-5 text-gray-400" />
                   <input
                     type="datetime-local"
                     name="startTime"
                     value={formData.startTime}
                     onChange={handleChange}
-                    className="w-full text-gray-700 pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className={getInputClassName(
+                      "startTime",
+                      "w-full text-gray-700 pl-12 pr-4 py-4 border rounded-lg focus:ring-2 text-base"
+                    )}
                   />
                 </div>
+                {fieldErrors.startTime && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {fieldErrors.startTime}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -386,15 +442,23 @@ export default function CreateEventPage() {
                   End Date & Time *
                 </label>
                 <div className="relative">
-                  <Clock className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
+                  <Clock className="absolute left-3 top-4 w-5 h-5 text-gray-400" />
                   <input
                     type="datetime-local"
                     name="endTime"
                     value={formData.endTime}
                     onChange={handleChange}
-                    className="w-full text-gray-700 pl-12 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className={getInputClassName(
+                      "endTime",
+                      "w-full text-gray-700 pl-12 pr-4 py-4 border rounded-lg focus:ring-2 text-base"
+                    )}
                   />
                 </div>
+                {fieldErrors.endTime && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {fieldErrors.endTime}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -439,12 +503,8 @@ export default function CreateEventPage() {
             <div className="pt-4">
               <button
                 onClick={handleSubmit}
-                disabled={!isFormValid || loading}
-                className={`w-full py-4 px-6 rounded-lg font-medium text-white transition-all duration-200 ${
-                  isFormValid && !loading
-                    ? "bg-gradient-to-r from-indigo-800 to-purple-800 hover:from-indigo-900 hover:to-purple-900 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                    : "bg-gray-400 cursor-not-allowed"
-                }`}
+                disabled={false}
+                className={`w-full py-4 px-6 rounded-lg font-medium text-white transition-all duration-200 bg-gradient-to-r from-indigo-800 to-purple-800 hover:from-indigo-900 hover:to-purple-900 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5`}
               >
                 {loading ? (
                   <div className="flex items-center justify-center">

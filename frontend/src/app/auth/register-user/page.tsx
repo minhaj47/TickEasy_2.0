@@ -32,7 +32,7 @@ export default function RegisterUserForm() {
 
     try {
       const response = await fetch(
-        "http://localhost:5001/api/auth/register-user",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register-user`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -60,7 +60,6 @@ export default function RegisterUserForm() {
       } else {
         showToast(data.message, "success");
         router.replace("/");
-
         setFormData({ email: "", password: "" });
       }
     } catch (err) {

@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken(storedToken);
 
         const response = await fetch(
-          "http://localhost:5001/api/auth/verify-token",
+          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify-token`,
           {
             method: "GET",
             headers: {

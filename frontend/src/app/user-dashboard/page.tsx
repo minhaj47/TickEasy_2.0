@@ -3,7 +3,6 @@
 import {
   AlertCircle,
   Calendar,
-  CheckCircle,
   Clock,
   CreditCard,
   Eye,
@@ -14,7 +13,6 @@ import {
   Ticket,
   User,
   X,
-  XCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -38,8 +36,8 @@ export default function UserDashboard() {
     if (isAuthenticated) {
       fetchUserData();
     } else {
-      showToast("Please login first to access your tickets", "info");
-      router.push("/auth/login");
+      // showToast("Please login first to access your tickets", "info");
+      router.push("/");
     }
   }, [isAuthenticated]);
 
@@ -49,7 +47,7 @@ export default function UserDashboard() {
       setLoading(true);
 
       const response = await fetch(
-        `http://localhost:5001/api/users/${info?.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/${info?.id}`
       );
       const data: UserResponse = await response.json();
       console.log(data);
@@ -149,26 +147,53 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-50 to-purple-50">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-16 shadow-md">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex items-center space-x-4 mb-4">
-            <User className="w-12 h-12 text-indigo-200" />
-            <div>
-              <h1 className="text-4xl font-bold leading-tight">
-                Welcome Back!
+      <header className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-20 relative overflow-hidden shadow-md">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]"></div>
+
+        <div className="max-w-7xl mx-auto px-8 relative">
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            {/* Primary Info */}
+            <div className="lg:col-span-2 space-y-3">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-800/40 text-indigo-100 rounded-full text-sm font-medium border border-indigo-700/30">
+                <div className="w-2 h-2 bg-indigo-300 rounded-full animate-pulse"></div>
+                Dashboard
+              </div>
+
+              <h1 className="text-5xl font-bold text-white tracking-tight">
+                My Tickets
               </h1>
-              <p className="text-lg text-indigo-100 mt-1">{userData.email}</p>
+
+              <p className="text-lg text-indigo-200 font-medium">
+                {userData.email}
+              </p>
             </div>
-          </div>
-          <div className="flex items-center space-x-6 text-indigo-200">
-            <div className="flex items-center space-x-2">
-              <Ticket className="w-5 h-5" />
-              <span>{userData.tickets.length} Tickets</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Calendar className="w-5 h-5" />
-              <span>Member since {formatDate(userData.createdAt)}</span>
+
+            {/* Stats Card */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-sm hover:bg-white/15 transition-all duration-300">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl flex items-center justify-center">
+                      <Ticket className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-white">
+                        {userData.tickets.length}
+                      </p>
+                      <p className="text-sm text-indigo-200">Active Tickets</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/20 pt-4">
+                  <div className="flex items-center gap-2 text-sm text-indigo-200">
+                    <Calendar className="w-4 h-4" />
+                    <span>Member since {formatDate(userData.createdAt)}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -194,14 +219,6 @@ export default function UserDashboard() {
           </div>
         ) : (
           <div className="space-y-8">
-            <div className="flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-gray-800">My Tickets</h2>
-              <div className="text-sm text-gray-600">
-                {userData.tickets.length} ticket
-                {userData.tickets.length !== 1 ? "s" : ""}
-              </div>
-            </div>
-
             <div className="grid gap-6">
               {userData.tickets.map((ticket) => (
                 <div
@@ -259,7 +276,7 @@ export default function UserDashboard() {
                           >
                             {ticket.paymentStatus}
                           </div>
-                          {ticket.checkedIn ? (
+                          {/* {ticket.checkedIn ? (
                             <div className="flex items-center space-x-1 text-green-600 mt-2 text-sm">
                               <CheckCircle className="w-4 h-4" />
                               <span>Checked In</span>
@@ -267,9 +284,9 @@ export default function UserDashboard() {
                           ) : (
                             <div className="flex items-center space-x-1 text-gray-500 mt-2 text-sm">
                               <XCircle className="w-4 h-4" />
-                              <span>Not Checked In</span>
+                              <span>Not Checked In Yet</span>
                             </div>
-                          )}
+                          )} */}
                         </div>
                       </div>
 
@@ -314,7 +331,7 @@ export default function UserDashboard() {
                             {ticket.event.ticketPrice && (
                               <div className="flex items-center space-x-2">
                                 <span className="text-gray-600">
-                                  ${ticket.event.ticketPrice}
+                                  ৳ {ticket.event.ticketPrice}
                                 </span>
                               </div>
                             )}
@@ -322,22 +339,53 @@ export default function UserDashboard() {
                         </div>
 
                         {/* Actions */}
-                        <div className="flex items-center space-x-3 mt-4 pt-4 border-t">
-                          <button
-                            onClick={() => setShowQrModel(ticket)}
-                            className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-                          >
-                            <QrCode className="w-4 h-4" />
-                            <span>View QR Code</span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              router.push(`/events/${ticket.event.id}`);
-                            }}
-                            className="flex items-center space-x-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
-                          >
-                            <span>Event Details</span>
-                          </button>
+                        <div className="mt-4 pt-4 border-t space-y-3">
+                          {ticket.paymentStatus.toUpperCase() ===
+                          "COMPLETED" ? (
+                            <div className="flex items-center space-x-3">
+                              <button
+                                onClick={() => setShowQrModel(ticket)}
+                                className="flex items-center space-x-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+                              >
+                                <QrCode className="w-4 h-4" />
+                                <span>View QR Code</span>
+                              </button>
+                              <button
+                                onClick={() => {
+                                  router.push(`/tickets/${ticket.id}`);
+                                }}
+                                className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+                              >
+                                <Eye className="w-4 h-4" />
+                                <span>Download Ticket</span>
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-lg space-y-2">
+                              <div className="flex items-center space-x-2">
+                                <AlertCircle className="w-5 h-5" />
+                                <p className="text-sm font-medium">
+                                  Your payment is pending. Ticket download and
+                                  QR access will be available after payment is
+                                  confirmed.
+                                </p>
+                              </div>
+                              <ul className="list-disc list-inside text-sm text-yellow-700 pl-1">
+                                <li>
+                                  Make sure your have made your payment and
+                                  provided transaction id properly.
+                                </li>
+                                <li>
+                                  Wait for a while, a confirmation mail will be
+                                  sent to you after payment is confirmed.
+                                </li>
+                                <li>
+                                  If you have made any mistake, contact event
+                                  organizers.
+                                </li>
+                              </ul>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -387,17 +435,6 @@ export default function UserDashboard() {
                   </span>
                 </p>
               </div>
-
-              {/* View Full Ticket Button */}
-              <button
-                onClick={() => {
-                  router.push(`/tickets/${showQrModel.id}`);
-                }}
-                className="w-full bg-violet-600 hover:bg-violet-700 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center space-x-2 transition-colors"
-              >
-                <Eye className="w-5 h-5" />
-                <span>View Full Ticket</span>
-              </button>
             </div>
           </div>
 

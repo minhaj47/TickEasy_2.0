@@ -49,6 +49,21 @@ export class TicketController {
         },
       });
 
+      const existing = await prisma.ticket.findFirst({
+        where: {
+          buyerEmail,
+          eventId,
+        },
+      });
+
+      if (existing) {
+        return res.status(400).json({
+          success: false,
+          message: 'A Ticket for this event is already booked with this email',
+          error: 'A Ticket for this event is already booked with this email',
+        } as TicketResponse);
+      }
+
       if (!event) {
         return res.status(404).json({
           success: false,
