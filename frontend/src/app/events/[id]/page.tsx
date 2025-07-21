@@ -17,7 +17,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { EventDTO, EventResponse } from "../../../../types/event";
 import { Role } from "../../../../types/organization";
@@ -29,13 +29,8 @@ interface DateFormatResult {
   fullDate: string;
 }
 
-interface EventDetailsPageProps {
-  params: { id: string };
-}
-
-const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
-  const { id: eventId } = params;
-  console.log(eventId);
+export default function EventDetailsPage() {
+  const { id: eventId } = useParams();
   const [event, setEvent] = useState<EventDTO | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -849,6 +844,4 @@ const EventDetailsPage: React.FC<EventDetailsPageProps> = ({ params }) => {
       )}
     </div>
   );
-};
-
-export default EventDetailsPage;
+}
