@@ -582,8 +582,8 @@ export default function EventDetailsPage() {
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h3 className="text-xl font-bold text-gray-800">
-                Book Your Ticket
+              <h3 className="text-xl font-semibold text-gray-600">
+                Register for the Event
               </h3>
               <button
                 onClick={closeModal}
@@ -603,55 +603,52 @@ export default function EventDetailsPage() {
 
                 {/* Mobile Banking Numbers */}
                 <div className="mb-4">
-                  <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="grid grid-cols-1 gap-2 text-sm">
                     <div className="flex items-center space-x-2">
                       <span className="font-semibold text-violet-800">
-                        bKash:
+                        bKash or Nagad:
                       </span>
-                      <span className="text-violet-700">01712-345678</span>
+                      <span className="text-violet-700">01638923273</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className="font-semibold text-violet-800">
                         Rocket:
                       </span>
-                      <span className="text-violet-700">01812-345678</span>
+                      <span className="text-violet-700">016389232735</span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="font-semibold text-violet-800">
-                        Nagad:
-                      </span>
-                      <span className="text-violet-700">01912-345678</span>
-                    </div>
+
                     <div className="flex items-center space-x-2">
                       <span className="font-semibold text-violet-800">
                         Cellfin:
                       </span>
-                      <span className="text-violet-700">01612-345678</span>
+                      <span className="text-violet-700">01909484884</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Instructions */}
-                <div className="space-y-2 text-sm text-violet-700">
-                  <p>
-                    <strong>Step 1:</strong> Pay Tk.{event.ticketPrice} using
-                    any mobile banking service above
-                  </p>
-                  <p>
-                    <strong>Step 2:</strong> Fill up the form with your{" "}
-                    <span className="font-semibold text-violet-800">
-                      valid transaction ID
-                    </span>
-                  </p>
-                  <p>
-                    <strong>Step 3:</strong> Wait for payment confirmation. Once
-                    confirmed we will send you a ticket via email.
-                  </p>
-                  <p>
-                    <strong>Step 4:</strong> Register and login to check status
-                    and access all your tickets
-                  </p>
-                </div>
+                {event.ticketPrice && event.ticketPrice > 0 && (
+                  <div className="space-y-2 text-sm text-violet-700">
+                    <p>
+                      <strong>Step 1:</strong> Pay Tk.{event.ticketPrice} using
+                      any mobile banking service above
+                    </p>
+                    <p>
+                      <strong>Step 2:</strong> Fill up the form with your{" "}
+                      <span className="font-semibold text-violet-800">
+                        valid transaction ID
+                      </span>
+                    </p>
+                    <p>
+                      <strong>Step 3:</strong> Wait for payment confirmation.
+                      Once confirmed we will send you a ticket via email.
+                    </p>
+                    <p>
+                      <strong>Step 4:</strong> Register and login to check
+                      status and access all your tickets
+                    </p>
+                  </div>
+                )}
 
                 {/* Important Note */}
                 <div className="mt-3 p-2 bg-violet-100 rounded-lg">
@@ -942,11 +939,7 @@ export default function EventDetailsPage() {
                       Processing...
                     </div>
                   ) : (
-                    `${
-                      event.ticketPrice
-                        ? `Pay ৳${event.ticketPrice}`
-                        : "Register for Free"
-                    }`
+                    `${event.ticketPrice ? `Register` : "Register for Free"}`
                   )}
                 </button>
               </form>
