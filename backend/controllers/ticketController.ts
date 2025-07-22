@@ -24,6 +24,8 @@ export class TicketController {
         paymentMethod,
         paymentId,
         userId,
+        isMale,
+        isSustian,
       }: CreateTicketBody = ticketData;
 
       if (
@@ -99,6 +101,8 @@ export class TicketController {
           paymentMethod,
           paymentId,
           eventId,
+          isMale,
+          isSustian,
           paymentStatus: PaymentStatus.PENDING,
           checkedIn: false,
           userId,
@@ -170,6 +174,8 @@ export class TicketController {
         buyerName: ticket.buyerName,
         buyerEmail: ticket.buyerEmail,
         buyerPhone: ticket.buyerPhone,
+        isMale: ticket.isMale,
+        isSustian: ticket.isSustian,
         paymentMethod: ticket.paymentMethod,
         paymentId: ticket.paymentId,
         paymentStatus: ticket.paymentStatus as PaymentStatus,

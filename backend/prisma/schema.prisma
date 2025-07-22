@@ -77,6 +77,8 @@ model Ticket {
   buyerName  String
   buyerEmail String
   buyerPhone String
+  isMale     Boolean
+  isSustian  Boolean
   qrCode     String  @unique @default(uuid())
   paymentStatus PaymentStatus
   paymentMethod String

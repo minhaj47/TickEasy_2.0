@@ -359,7 +359,7 @@ export default function CreateEventPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Ticket Price (USD)
+                  Ticket Price (BDT)
                 </label>
                 <div className="relative">
                   <DollarSign className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />

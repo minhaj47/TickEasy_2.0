@@ -49,6 +49,8 @@ export default function EventDetailsPage() {
     buyerPhone: "",
     paymentMethod: "",
     paymentId: "",
+    isMale: undefined,
+    isSustian: undefined,
   });
   const router = useRouter();
   useEffect(() => {
@@ -137,8 +139,23 @@ export default function EventDetailsPage() {
       errors.paymentId = "Payment ID is required for online payments";
     }
 
+    if (formData.isSustian === undefined) {
+      errors.isSustian = true;
+    }
+    if (formData.isMale === undefined) {
+      errors.isMale = true;
+    }
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
+  };
+
+  const handleGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value === "true",
+    }));
   };
 
   const handleInputChange = (
@@ -179,6 +196,8 @@ export default function EventDetailsPage() {
         paymentMethod: formData.paymentMethod,
         paymentId: formData.paymentId,
         userId: info?.id,
+        isMale: formData.isMale,
+        isSustian: formData.isSustian,
       };
 
       const response = await fetch(
@@ -210,6 +229,8 @@ export default function EventDetailsPage() {
         buyerPhone: "",
         paymentMethod: "",
         paymentId: "",
+        isMale: undefined,
+        isSustian: undefined,
       });
     } catch (err) {
       console.error("Registration failed:", err);
@@ -712,7 +733,7 @@ export default function EventDetailsPage() {
                     htmlFor="buyerPhone"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Phone Number (Optional)
+                    Phone Number
                   </label>
                   <input
                     type="tel"
@@ -723,6 +744,100 @@ export default function EventDetailsPage() {
                     className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors"
                     placeholder="Enter your phone number"
                   />
+                </div>
+
+                {/* Gender Field */}
+                <div>
+                  <label
+                    htmlFor="isMale"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Gender *
+                  </label>
+                  <div className="relative">
+                    <select
+                      id="isMale"
+                      name="isMale"
+                      value={
+                        formData.isMale === undefined
+                          ? ""
+                          : formData.isMale
+                          ? "true"
+                          : "false"
+                      }
+                      onChange={handleGenderChange}
+                      className={`w-full text-black px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors ${
+                        formErrors.isMale ? "border-red-500" : "border-gray-300"
+                      }`}
+                    >
+                      <option value="">Select gender</option>
+                      <option value="true">Male</option>
+                      <option value="false">Female</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+
+                {/* SUST Student Field */}
+                <div>
+                  <label
+                    htmlFor="isSUSTian"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    From SUST? *
+                  </label>
+                  <div className="relative">
+                    <select
+                      id="isSustian"
+                      name="isSustian"
+                      value={
+                        formData.isSustian === undefined
+                          ? ""
+                          : formData.isSustian
+                          ? "true"
+                          : "false"
+                      }
+                      onChange={handleGenderChange}
+                      className={`w-full text-black px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors ${
+                        formErrors.isSustian
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      <option value="">Select option</option>
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <svg
+                        className="w-5 h-5 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Payment Method */}

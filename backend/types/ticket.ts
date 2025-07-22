@@ -7,6 +7,8 @@ export interface CreateTicketBody {
   buyerPhone: string;
   paymentMethod: string;
   paymentId: string;
+  isMale: boolean;
+  isSustian: boolean;
   userId?: string;
 }
 

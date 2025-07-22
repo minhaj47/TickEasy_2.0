@@ -53,6 +53,8 @@ export class UserOrgController {
           paymentMethod: ticket.paymentMethod,
           paymentId: ticket.paymentId,
           paymentStatus: ticket.paymentStatus,
+          isMale: ticket.isMale,
+          isSustian: ticket.isSustian,
           qrCode: ticket.qrCode,
           checkedIn: ticket.checkedIn,
           event: {
