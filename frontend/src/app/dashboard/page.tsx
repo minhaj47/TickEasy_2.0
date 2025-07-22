@@ -386,28 +386,106 @@ export default function ModernDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-800 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
+      <header className="bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-800 text-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          {/* Desktop Layout */}
+          <div className="hidden md:block">
+            <div className="flex justify-between items-start pt-6 pb-4">
+              {/* Back Button - Top Left */}
+              <button
+                onClick={() => router.push("/")}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg border border-white/20 text-white text-sm font-medium transition-all duration-300 hover:scale-105 shadow-md"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+                Back
+              </button>
+
+              {/* Create Button - Top Right */}
+              <button
+                onClick={() => router.push("/events/create")}
+                className="bg-white text-indigo-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-50 transition-all duration-300 shadow-md flex items-center gap-2 hover:shadow-lg"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Create</span>
+              </button>
+            </div>
+
+            {/* Centered Title and Subtitle */}
+            <div className="text-center py-8 pb-12">
+              <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent mb-3">
                 {orgData.name}
               </h1>
-              <p className="text-indigo-200 mt-2 text-lg">
+              <p className="text-indigo-200 text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed">
                 Monitor your events, analyze performance, and grow your
                 organization
               </p>
             </div>
-            <button
-              onClick={() => {
-                router.push("/events/create");
-              }}
-              className="bg-white text-indigo-900 px-6 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-all shadow-lg flex items-center space-x-2"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Create Event</span>
-            </button>
+          </div>
+
+          {/* Mobile Layout */}
+          <div className="block md:hidden">
+            {/* Mobile Header Row */}
+            <div className="flex justify-between items-center py-4">
+              {/* Back Button */}
+              <button
+                onClick={() => router.push("/")}
+                className="inline-flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg border border-white/20 text-white text-sm font-medium transition-all duration-300 hover:scale-105 shadow-md"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                  />
+                </svg>
+                Back
+              </button>
+
+              {/* Create Button */}
+              <button
+                onClick={() => router.push("/events/create")}
+                className="bg-white text-indigo-900 px-3 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-50 transition-all duration-300 shadow-md flex items-center gap-1.5"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Create</span>
+              </button>
+            </div>
+
+            {/* Mobile Title Section */}
+            <div className="text-center py-6 pb-10 px-2">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent mb-2 leading-tight">
+                {orgData.name}
+              </h1>
+              <p className="text-indigo-200 text-base sm:text-lg leading-relaxed">
+                Monitor your events, analyze performance, and grow your
+                organization
+              </p>
+            </div>
+          </div>
+
+          {/* Decorative background elements */}
+          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
+            <div className="absolute top-20 right-20 w-32 h-32 bg-purple-300/10 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-10 left-1/4 w-24 h-24 bg-indigo-300/10 rounded-full blur-xl"></div>
           </div>
         </div>
       </header>

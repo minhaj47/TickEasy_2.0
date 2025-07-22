@@ -35,7 +35,107 @@ export default function TicketPage() {
     if (printRef.current) {
       const printContents = printRef.current.innerHTML;
       const original = document.body.innerHTML;
-      document.body.innerHTML = printContents;
+      document.body.innerHTML = `
+        <style>
+          @page {
+            size: A4;
+            margin: 0in;
+          }
+          @media print {
+            body {
+              font-family: system-ui, -apple-system, sans-serif;
+              line-height: 1.4;
+              color: #000;
+              background: #fff;
+            }
+            .print-container {
+              max-width: 7.5in;
+              margin: 0 auto;
+              background: white;
+              page-break-inside: avoid;
+            }
+            .print-header img {
+              max-height: 3in;
+              width: 100%;
+              object-fit: cover;
+            }
+            .print-content {
+              padding: 0.75in;
+            }
+            .print-title {
+              font-size: 1.5rem;
+              font-weight: bold;
+              margin-bottom: 0.5rem;
+            }
+            .print-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 1rem;
+              margin: 1rem 0;
+            }
+            .print-info-box {
+              padding: 0.75rem;
+              background: #f8f9fa;
+              border-radius: 0.5rem;
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+            }
+            .print-icon {
+              width: 1.25rem;
+              height: 1.25rem;
+              padding: 0.5rem;
+              background: #e5e7eb;
+              border-radius: 0.375rem;
+            }
+            .print-qr-section {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-top: 1.5rem;
+              padding-top: 1rem;
+              border-top: 1px solid #e5e7eb;
+            }
+            .print-qr-container {
+              text-align: center;
+            }
+            .print-org-info {
+              display: flex;
+              align-items: center;
+              gap: 1rem;
+            }
+            .print-org-logo {
+              height: 2.5rem;
+              width: auto;
+            }
+            .print-date-box {
+              background: #f3f4f6;
+              border: 1px solid #d1d5db;
+              border-radius: 0.75rem;
+              padding: 1rem;
+              text-align: center;
+              min-width: 4rem;
+            }
+            .print-holder-section {
+              border-top: 1px solid #e5e7eb;
+              padding-top: 1.5rem;
+              margin-top: 1.5rem;
+            }
+            .print-holder-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 1rem;
+              margin-top: 1rem;
+            }
+            .print-holder-item {
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+            }
+          }
+        </style>
+        <div class="print-container">${printContents}</div>
+      `;
       window.print();
       document.body.innerHTML = original;
       window.location.reload();
@@ -63,10 +163,10 @@ export default function TicketPage() {
       <div className="max-w-3xl mx-auto p-6">
         <div
           ref={printRef}
-          className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden"
+          className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden print-container"
         >
           {/* Header Section */}
-          <div className="relative">
+          <div className="relative print-header">
             <img
               src={event.imageUrl}
               alt={event.title}
@@ -80,18 +180,18 @@ export default function TicketPage() {
             </div>
           </div>
 
-          <div className="p-8">
+          <div className="p-8 print-content">
             {/* Event Title and Date Section */}
             <div className="flex items-start justify-between mb-6">
               <div className="flex-1">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                <h1 className="text-2xl font-bold text-gray-900 mb-2 print-title">
                   {event.title}
                 </h1>
                 <p className="text-gray-600">
                   Presented by {event.organization.name}
                 </p>
               </div>
-              <div className="flex flex-col items-center bg-gradient-to-br from-violet-50 to-indigo-50 border border-violet-200 rounded-xl p-4 min-w-[80px] ml-6">
+              <div className="flex flex-col items-center bg-gradient-to-br from-violet-50 to-indigo-50 border border-violet-200 rounded-xl p-4 min-w-[80px] ml-6 print-date-box">
                 <span className="text-2xl font-bold text-violet-700">
                   {day}
                 </span>
@@ -102,10 +202,10 @@ export default function TicketPage() {
             </div>
 
             {/* Event Details Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 print-grid">
               {/* Date & Time */}
-              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
-                <div className="bg-indigo-100 p-2 rounded-lg">
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl print-info-box">
+                <div className="bg-indigo-100 p-2 rounded-lg print-icon">
                   <Calendar className="w-5 h-5 text-indigo-600" />
                 </div>
                 <div>
@@ -130,8 +230,8 @@ export default function TicketPage() {
               </div>
 
               {/* Location */}
-              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
-                <div className="bg-emerald-100 p-2 rounded-lg">
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl print-info-box">
+                <div className="bg-emerald-100 p-2 rounded-lg print-icon">
                   <MapPin className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div>
@@ -144,12 +244,12 @@ export default function TicketPage() {
             </div>
 
             {/* Ticket Holder Information */}
-            <div className="border-t border-gray-200 pt-6 mb-8">
+            <div className="border-t border-gray-200 pt-6 mb-8 print-holder-section">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Ticket Holder Information
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center space-x-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 print-holder-grid">
+                <div className="flex items-center space-x-3 print-holder-item">
                   <User className="w-4 h-4 text-gray-400" />
                   <div>
                     <p className="text-xs text-gray-500 uppercase tracking-wide">
@@ -160,7 +260,7 @@ export default function TicketPage() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 print-holder-item">
                   <Mail className="w-4 h-4 text-gray-400" />
                   <div>
                     <p className="text-xs text-gray-500 uppercase tracking-wide">
@@ -169,7 +269,7 @@ export default function TicketPage() {
                     <p className="text-gray-900">{ticket.buyerEmail}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 print-holder-item">
                   <Phone className="w-4 h-4 text-gray-400" />
                   <div>
                     <p className="text-xs text-gray-500 uppercase tracking-wide">
@@ -178,7 +278,7 @@ export default function TicketPage() {
                     <p className="text-gray-900">{ticket.buyerPhone}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 print-holder-item">
                   <CreditCard className="w-4 h-4 text-gray-400" />
                   <div>
                     <p className="text-xs text-gray-500 uppercase tracking-wide">
@@ -199,12 +299,12 @@ export default function TicketPage() {
             </div>
 
             {/* QR Code and Organization Section */}
-            <div className="flex flex-col md:flex-row items-center justify-between border-t border-gray-200 pt-6">
-              <div className="flex items-center space-x-4 mb-4 md:mb-0">
+            <div className="flex flex-col md:flex-row items-center justify-between border-t border-gray-200 pt-6 print-qr-section">
+              <div className="flex items-center space-x-4 mb-4 md:mb-0 print-org-info">
                 <img
                   src={event.organization.logoUrl}
                   alt={`${event.organization.name} logo`}
-                  className="h-12 w-auto object-contain"
+                  className="h-12 w-auto object-contain print-org-logo"
                 />
                 <div>
                   <p className="text-sm text-gray-500">Organized by</p>
@@ -214,20 +314,20 @@ export default function TicketPage() {
                 </div>
               </div>
 
-              <div className="text-center">
+              <div className="text-center print-qr-container">
                 <p className="text-sm text-gray-500 mb-2">Scan for entry</p>
-                <QRCodeSVG value={qrPayload} />
+                <QRCodeSVG value={qrPayload} size={120} />
               </div>
             </div>
 
             {/* Important Notice */}
-            <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+            {/* <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
               <p className="text-sm text-amber-800">
                 <strong>Important:</strong> Please present this ticket (digital
                 or printed) along with a valid ID for entry. Ticket is
                 non-transferable and valid for single use only.
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
 

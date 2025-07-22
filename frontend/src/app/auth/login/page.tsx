@@ -82,6 +82,28 @@ export default function LoginForm() {
   return (
     <div className="min-h-screen bg-white">
       <div className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-9 relative overflow-hidden">
+        {/* Back Button - Top Left */}
+        <div className="absolute top-14 left-4 -mt-10 z-10">
+          <button
+            onClick={() => router.push("/")}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg border border-white/20 text-white font-medium transition-all duration-300 hover:scale-105 shadow-lg"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+            Back
+          </button>
+        </div>
         {/* Background Elements */}
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]"></div>
         <div className="absolute top-10 right-20 w-32 h-32 bg-purple-400/10 rounded-full blur-3xl"></div>

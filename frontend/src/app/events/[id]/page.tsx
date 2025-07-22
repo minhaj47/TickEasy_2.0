@@ -544,6 +544,10 @@ export default function EventDetailsPage() {
                       and login to view all ticket details and manage bookings
                     </li>
                   </ul>
+                  <h4 className="font-semibold text-violet-800 mb-2">
+                    # You can buy tickets for others, but the email address
+                    should be unique for each ticket.
+                  </h4>
                 </div>
               </div>
             </div>

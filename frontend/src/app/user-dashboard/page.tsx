@@ -3,6 +3,7 @@
 import {
   AlertCircle,
   Calendar,
+  CheckCircle,
   Clock,
   CreditCard,
   Eye,
@@ -147,53 +148,47 @@ export default function UserDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-50 to-purple-50">
-      <header className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-20 relative overflow-hidden shadow-md">
+      <header className="bg-gradient-to-r from-indigo-900 to-purple-900 text-white py-14 relative overflow-hidden shadow-md">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]"></div>
 
         <div className="max-w-7xl mx-auto px-8 relative">
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-            {/* Primary Info */}
-            <div className="lg:col-span-2 space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-800/40 text-indigo-100 rounded-full text-sm font-medium border border-indigo-700/30">
-                <div className="w-2 h-2 bg-indigo-300 rounded-full animate-pulse"></div>
-                Dashboard
-              </div>
+          {/* Back Button - Top Left */}
+          <div className="absolute top-0 left-4 -mt-10 z-10 gap-10">
+            <button
+              onClick={() => router.push("/")}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg border border-white/20 text-white font-medium transition-all duration-300 hover:scale-105 shadow-lg"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
+              </svg>
+              Back
+            </button>
+          </div>
 
-              <h1 className="text-5xl font-bold text-white tracking-tight">
-                My Tickets
-              </h1>
-
-              <p className="text-lg text-indigo-200 font-medium">
-                {userData.email}
-              </p>
+          {/* Main Content - Centered */}
+          <div className="flex flex-col items-center justify-center text-center space-y-6">
+            {/* Dashboard Badge - Larger and Centered */}
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-800/40 text-indigo-100 rounded-full text-lg font-semibold border border-indigo-700/30 backdrop-blur-sm shadow-lg">
+              <div className="w-3 h-3 bg-indigo-300 rounded-full animate-pulse"></div>
+              <span className="text-xl">Dashboard</span>
             </div>
 
-            {/* Stats Card */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-sm hover:bg-white/15 transition-all duration-300">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl flex items-center justify-center">
-                      <Ticket className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-white">
-                        {userData.tickets.length}
-                      </p>
-                      <p className="text-sm text-indigo-200">Active Tickets</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-white/20 pt-4">
-                  <div className="flex items-center gap-2 text-sm text-indigo-200">
-                    <Calendar className="w-4 h-4" />
-                    <span>Member since {formatDate(userData.createdAt)}</span>
-                  </div>
-                </div>
-              </div>
+            {/* User Email - Prominent Display */}
+            <div className="space-y-2">
+              <p className="text-xl md:text-2xl text-indigo-200 font-medium bg-white/5 px-6 py-2 rounded-full backdrop-blur-sm border border-white/10">
+                {userData.email}
+              </p>
             </div>
           </div>
         </div>
@@ -343,23 +338,35 @@ export default function UserDashboard() {
                         <div className="mt-4 pt-4 border-t space-y-3">
                           {ticket.paymentStatus.toUpperCase() ===
                           "COMPLETED" ? (
-                            <div className="flex items-center space-x-3">
-                              <button
-                                onClick={() => setShowQrModel(ticket)}
-                                className="flex items-center space-x-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
-                              >
-                                <QrCode className="w-4 h-4" />
-                                <span>View QR Code</span>
-                              </button>
-                              <button
-                                onClick={() => {
-                                  router.push(`/tickets/${ticket.id}`);
-                                }}
-                                className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-                              >
-                                <Eye className="w-4 h-4" />
-                                <span>Download Ticket</span>
-                              </button>
+                            <div className="space-y-4">
+                              <div className="bg-green-50 border border-green-200 text-green-800 p-4 rounded-lg space-y-2">
+                                <div className="flex items-center space-x-2">
+                                  <CheckCircle className="w-8 h-8" />
+                                  <p className="text-sm font-medium">
+                                    It is enough to have the soft copy of the QR
+                                    code or the ticket. Not necessary to print
+                                    it.
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex items-center space-x-3">
+                                <button
+                                  onClick={() => setShowQrModel(ticket)}
+                                  className="flex items-center space-x-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+                                >
+                                  <QrCode className="w-4 h-4" />
+                                  <span>View QR Code</span>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    router.push(`/tickets/${ticket.id}`);
+                                  }}
+                                  className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                  <span>View Ticket</span>
+                                </button>
+                              </div>
                             </div>
                           ) : (
                             <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-lg space-y-2">
@@ -422,7 +429,7 @@ export default function UserDashboard() {
                   </div>
                 ) : (
                   <div className="w-60 h-60 mx-auto bg-gray-200 rounded-lg flex items-center justify-center">
-                    <QrCode className="w-20 h-20 text-gray-400" />
+                    <QrCode className="w-22 h-22 text-gray-400" />
                   </div>
                 )}
               </div>
