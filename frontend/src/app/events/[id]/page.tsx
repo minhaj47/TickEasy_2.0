@@ -637,13 +637,13 @@ export default function EventDetailsPage() {
                 {event.ticketPrice && event.ticketPrice > 0 && (
                   <div className="space-y-2 text-sm text-violet-700">
                     <p>
-                      <strong>Step 1:</strong> Pay Tk.{event.ticketPrice} using
-                      any mobile banking service above
+                      <strong>Step 1:</strong> Pay the fee using any mobile
+                      banking service above or cash
                     </p>
                     <p>
                       <strong>Step 2:</strong> Fill up the form with your{" "}
                       <span className="font-semibold text-violet-800">
-                        valid transaction ID
+                        valid transaction ID or Cash Reference
                       </span>
                     </p>
                     <p>
