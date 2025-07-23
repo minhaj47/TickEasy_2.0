@@ -327,7 +327,10 @@ export default function UserDashboard() {
                             {ticket.event.ticketPrice && (
                               <div className="flex items-center space-x-2">
                                 <span className="text-gray-600">
-                                  ৳ {ticket.event.ticketPrice}
+                                  ৳{" "}
+                                  {ticket.isSustian
+                                    ? ticket.event.ticketPrice
+                                    : ticket.event.ticketPrice * 2}
                                 </span>
                               </div>
                             )}

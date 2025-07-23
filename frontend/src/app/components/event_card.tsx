@@ -66,9 +66,9 @@ const EventCard = ({ event }: { event: EventDTO }) => {
 
                 <div className="flex items-center justify-between text-sm text-gray-500">
                   <span>By {event.organization?.name || "Anonymous"}</span>
-                  <span className="text-base font-semibold text-indigo-600">
+                  {/* <span className="text-base font-semibold text-indigo-600">
                     {event.ticketPrice ? `৳${event.ticketPrice}` : "Free"}
-                  </span>
+                  </span> */}
                 </div>
               </div>
             </div>

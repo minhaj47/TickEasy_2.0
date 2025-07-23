@@ -14,7 +14,7 @@ const ErrorMessage = ({
   <div className="text-center py-12">
     <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
     <h3 className="text-lg font-semibold text-gray-800 mb-2">
-      Something went wrong
+      Network Error!!
     </h3>
     <p className="text-gray-600 mb-4">{message}</p>
     <button

@@ -14,7 +14,6 @@ import {
   Phone,
   Share2,
   Ticket,
-  Users,
   X,
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -374,17 +373,24 @@ export default function EventDetailsPage() {
                         </span>
                       </div>
                       <div className="flex items-center text-gray-600">
+                        <Ticket className="w-5 h-5 mr-2 text-violet-600" />
+                        <span className="font-semibold text-indigo-600">
+                          {event.ticketPrice ? `৳${event.ticketPrice}` : "Free"}{" "}
+                        </span>
+                      </div>
+                      <div className="flex items-center text-gray-600">
+                        {/* <Users className="w-5 h-5 mr-2 text-violet-600" />
+                        <span>{availableSeats} seats available</span> */}
                         <MapPin className="w-5 h-5 mr-2 text-violet-600" />
                         <span>{event.location || "Location TBD"}</span>
                       </div>
-                      <div className="flex items-center text-gray-600">
-                        <Users className="w-5 h-5 mr-2 text-violet-600" />
-                        <span>{availableSeats} seats available</span>
-                      </div>
-                      <div className="flex items-center text-gray-600">
+                      <div className="flex  items-center text-gray-600">
                         <Ticket className="w-5 h-5 mr-2 text-violet-600" />
                         <span className="font-semibold text-indigo-600">
-                          {event.ticketPrice ? `৳${event.ticketPrice}` : "Free"}
+                          {event.ticketPrice
+                            ? `৳${event.ticketPrice * 2}`
+                            : "Free"}{" "}
+                          (Non-SUSTian)
                         </span>
                       </div>
                     </div>
@@ -451,16 +457,17 @@ export default function EventDetailsPage() {
             </div>
 
             {/* Sidebar - Registration */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 gap-5">
               <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sticky top-24">
-                <div className="text-center mb-6">
-                  <div className="text-3xl font-bold text-gray-800 mb-2">
-                    {event.ticketPrice ? `৳${event.ticketPrice}` : "Free"}
+                {!registrationSuccess && (
+                  <div className="mt-6 mb-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                    <h4 className="font-semibold text-blue-800 mb-2">
+                      Pay First and then Fill up the form by clicking the button
+                      below
+                    </h4>
                   </div>
-                  <p className="text-gray-600">Per person</p>
-                </div>
-
-                {/* Seat availability */}
+                )}
+                {/* //Seat availability
                 <div className="mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-medium text-gray-700">
@@ -485,7 +492,7 @@ export default function EventDetailsPage() {
                   <p className="text-xs text-gray-500 mt-1">
                     {event.ticketCount} people already registered
                   </p>
-                </div>
+                </div> */}
 
                 {/* Registration Button */}
                 {registrationSuccess && ticketId ? (
@@ -861,7 +868,7 @@ export default function EventDetailsPage() {
                         <option value="">Select payment method</option>
                         <option value="bKash">💳 bKash</option>
                         <option value="Rocket">🚀 Rocket</option>
-                        <option value="Nogod">📱 Nogod</option>
+                        <option value="Nogod">📱 Nagad</option>
                         <option value="Cash">💵 Cash</option>
                         <option value="Cellfin">📞 Cellfin</option>
                       </select>
