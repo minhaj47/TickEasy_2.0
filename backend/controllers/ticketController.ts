@@ -88,7 +88,7 @@ export class TicketController {
         where: { eventId },
       });
 
-      const paddedNumber = String(ticketCount + 1).padStart(5, '0');
+      const paddedNumber = String(ticketCount + 10).padStart(5, '0');
       const identifier = `TKT-${event.title}-${paddedNumber}`;
 
       // Create ticket in database

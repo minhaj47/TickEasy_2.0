@@ -201,7 +201,7 @@ export default function EventDetailsPage() {
         paymentId: formData.paymentId,
         userId: info?.id,
         isMale: formData.isMale,
-        isSustian: formData.isSustian,
+        isSustian: true,
       };
 
       const response = await fetch(
@@ -234,7 +234,7 @@ export default function EventDetailsPage() {
         paymentMethod: "",
         paymentId: "",
         isMale: undefined,
-        isSustian: undefined,
+        isSustian: true,
       });
     } catch (err) {
       console.error("Registration failed:", err);
@@ -523,21 +523,23 @@ export default function EventDetailsPage() {
 
                     <div className="text-sm text-green-700 mb-6 leading-relaxed">
                       <p className="mb-3">
-                        <strong>What happens next?</strong>
+                        <strong>What Happens Next?</strong>
                       </p>
                       <ol className="list-decimal list-inside space-y-2 text-left max-w-md mx-auto">
                         <li>
-                          Wait a few moments while we confirm your payment.
-                          (Comfirming your payment may take 1-2 days. So
-                          don&apos;t Worry.)
+                          We are checking your payment. This can take up to
+                          **1-2 days**.
                         </li>
                         <li>
-                          Once confirmed, you will receive your ticket via
-                          email.
+                          You can see your payment status in your dashboard.
                         </li>
                         <li>
-                          You can register and log in to check your tickets,
-                          ticket status and download them.
+                          After confirmation, we will will approve your ticket
+                          then you can download it from the dashboard.
+                        </li>
+                        <li>
+                          We will send you the ticket via email before the
+                          program.
                         </li>
                       </ol>
                     </div>
@@ -578,17 +580,19 @@ export default function EventDetailsPage() {
                   </h4>
                   <ul className="text-sm text-violet-700 space-y-2">
                     <li>
-                      • <strong>Buy your ticket</strong> - Purchase directly
-                      without needing to create an account
-                    </li>
-                    <li>
                       • <strong>Complete payment</strong> - Finish your payment
-                      and wait for confirmation. (It may take 1-2 days. So
-                      don&apos;t Worry.)
+                      and wait for confirmation.
                     </li>
                     <li>
-                      • <strong>Check your email</strong> - Your basic ticket
-                      will be sent once payment is confirmed.
+                      • <strong>Fill up the Form:</strong> - Fill up the form
+                      with your valid email and transaction ID or Cash
+                      Reference.
+                    </li>
+                    <li>
+                      • <strong>Wait for Confirmation</strong> - We will confirm
+                      your payment. Which you can see in your dashboard. Your
+                      basic ticket will be before the program. (Payment
+                      Confirmation may take 1-2 days. So don&apos;t Worry.)
                     </li>
                     <li>
                       • <strong>Create account (optional)</strong> - Register
