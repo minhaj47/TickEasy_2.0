@@ -1,0 +1,81 @@
+<svg width="300" height="120" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient definitions -->
+    <linearGradient id="tickGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7C2D12;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="easyGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3730A3;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#7C3AED;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#7C2D12;stop-opacity:0.3" />
+    </linearGradient>
+    
+    <linearGradient id="taglineUnderline" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#A855F7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Blur filter for glow effect -->
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8"/>
+    </filter>
+    
+    <!-- Animations -->
+    <animate id="pulseAnimation" attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+    <animate id="pingAnimation" attributeName="r" values="1;3;1" dur="1s" repeatCount="indefinite"/>
+  </defs>
+  
+  <!-- Background glow effect -->
+  <rect x="20" y="10" width="180" height="50" rx="8" ry="8" fill="url(#glowGradient)" filter="url(#blur)" opacity="0.4"/>
+  
+  <!-- Main logo text -->
+  <g font-family="Arial, sans-serif" font-weight="bold" font-size="36">
+    <!-- "Tick" text -->
+    <text x="30" y="50" fill="url(#tickGradient)" letter-spacing="-1px">Tick</text>
+    
+    <!-- "Easy" text -->
+    <text x="110" y="50" fill="url(#easyGradient)" letter-spacing="-1px">Easy</text>
+  </g>
+  
+  <!-- Sparkle effects -->
+  <!-- Yellow sparkle (top right) -->
+  <circle cx="190" cy="15" r="2" fill="#FBBF24">
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Blue sparkle (top left) -->
+  <circle cx="50" cy="20" r="1" fill="#93C5FD">
+    <animate attributeName="r" values="1;2;1" dur="1s" repeatCount="indefinite" begin="0.3s"/>
+  </circle>
+  
+  <!-- Purple sparkle (bottom left) -->
+  <circle cx="80" cy="55" r="1.5" fill="#C084FC">
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" begin="0.6s"/>
+  </circle>
+  
+  <!-- Tagline -->
+  <g font-family="Arial, sans-serif" font-size="12" font-weight="500" letter-spacing="2px" fill="#D1D5DB">
+    <text x="150" y="80" text-anchor="middle" opacity="0.8">YOUR EVENT</text>
+    <circle cx="150" cy="85" r="1" fill="#A855F7"/>
+    <text x="150" y="95" text-anchor="middle" opacity="0.8">OUR RESPONSIBILITY</text>
+    
+    <!-- Animated underline -->
+    <line x1="90" y1="100" x2="210" y2="100" stroke="url(#taglineUnderline)" stroke-width="1" opacity="0.8">
+      <animate attributeName="stroke-dasharray" values="0,120;120,0" dur="3s" repeatCount="indefinite"/>
+    </line>
+  </g>
+  
+  <!-- Hover effects simulation (additional glow) -->
+  <rect x="20" y="10" width="180" height="50" rx="8" ry="8" fill="url(#glowGradient)" filter="url(#blur)" opacity="0.2">
+    <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite"/>
+  </rect>
+</svg>
