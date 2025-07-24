@@ -408,7 +408,7 @@ export default function EventDetailsPage() {
                   <AlertTriangle className="w-10 h-10 text-red-600" />
                   {/* <h4 className="font-semibold text-red-800 mb-2">
                     Limited Seats for our Non-Sustian Brothers and Sisters have
-                    been filled up. We can't take any more registrations.
+                    been filled up. We can&apos;t take any more registrations.
                   </h4> */}
                   <h4 className="font-semibold text-red-800 mb-2">
                     নন-সাস্টিয়ান ভাইদের জন্য বরাদ্দ সীমিত সিট পূর্ণ হয়ে গেছে।
@@ -528,8 +528,8 @@ export default function EventDetailsPage() {
                       <ol className="list-decimal list-inside space-y-2 text-left max-w-md mx-auto">
                         <li>
                           Wait a few moments while we confirm your payment.
-                          (Comfirming your payment may take 1-2 days. So don't
-                          Worry.)
+                          (Comfirming your payment may take 1-2 days. So
+                          don&apos;t Worry.)
                         </li>
                         <li>
                           Once confirmed, you will receive your ticket via
@@ -583,8 +583,8 @@ export default function EventDetailsPage() {
                     </li>
                     <li>
                       • <strong>Complete payment</strong> - Finish your payment
-                      and wait for confirmation. (It may take 1-2 days. So don't
-                      Worry.)
+                      and wait for confirmation. (It may take 1-2 days. So
+                      don&apos;t Worry.)
                     </li>
                     <li>
                       • <strong>Check your email</strong> - Your basic ticket
@@ -694,7 +694,7 @@ export default function EventDetailsPage() {
                 <AlertTriangle className="w-10 h-10 text-red-600" />
                 {/* <h4 className="font-semibold text-red-800 mb-2">
                     Limited Seats for our Non-Sustian Brothers and Sisters have
-                    been filled up. We can't take any more registrations.
+                    been filled up. We can&apos;t take any more registrations.
                   </h4> */}
                 <p className="font-semibold text-red-800 ">
                   নন-সাস্টিয়ান ভাইদের জন্য বরাদ্দ সীমিত সিট পূর্ণ হয়ে গেছে।
