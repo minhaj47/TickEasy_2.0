@@ -1,7 +1,12 @@
 import { PaymentStatus } from '@prisma/client';
 import { Request, Response } from 'express';
 import prisma from '../prismaClient';
-import { CreateTicketBody, TicketDTO, TicketResponse } from '../types/ticket';
+import {
+  CheckInPayload,
+  CreateTicketBody,
+  TicketDTO,
+  TicketResponse,
+} from '../types/ticket';
 
 export class TicketController {
   /**
@@ -38,7 +43,7 @@ export class TicketController {
       ) {
         return res.status(400).json({
           success: false,
-          error: 'Missing required fields',
+          error: 'Missing required fields to book a ticket!',
         } as TicketResponse);
       }
 
@@ -51,6 +56,7 @@ export class TicketController {
         },
       });
 
+      // this check can be removed further.
       const existing = await prisma.ticket.findFirst({
         where: {
           buyerEmail,
@@ -218,6 +224,154 @@ export class TicketController {
         success: false,
         message: 'Failed to retrieve ticket',
         error: 'Internal server error',
+      });
+    }
+  }
+
+  // verify Ticket
+
+  static async verifyTicket(
+    req: Request<{}, {}, CheckInPayload>,
+    res: Response<TicketResponse>
+  ): Promise<Response<TicketResponse>> {
+    try {
+      console.log('reached verify ticket');
+      const { ticketIdentifier, qrCode, organizationId }: CheckInPayload =
+        req.body;
+
+      if (!ticketIdentifier || !qrCode || !organizationId) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing Enough Info to check the ticket',
+          error: 'Missing Enough Info to check the ticket',
+        });
+      }
+
+      const ticket = await prisma.ticket.findUnique({
+        where: { identifier: ticketIdentifier },
+        include: {
+          event: {
+            select: {
+              organization: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!ticket) {
+        return res.status(404).json({
+          success: false,
+          message: 'Ticket not found',
+          error: 'Ticket does not exist',
+        });
+      }
+
+      if (ticket.event.organization.id !== organizationId) {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not authorized to check for this ticket!',
+          error: 'You are not authorized to check for this ticket!',
+        });
+      }
+
+      if (ticket.qrCode !== qrCode) {
+        return res.status(403).json({
+          success: false,
+          message: 'Invalid QR code',
+          error: 'Invalid QR code',
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: 'Ticket verified successfully',
+        checkedIn: ticket.checkedIn,
+      });
+    } catch (error) {
+      console.error('Error verifying ticket:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Connection Error or Internal Server Error',
+        error: 'Connection Error or Internal Server Error',
+      });
+    }
+  }
+
+  // check in
+  static async checkInTicket(
+    req: Request<{}, {}, CheckInPayload>,
+    res: Response
+  ): Promise<Response | void> {
+    try {
+      console.log('reached check in ticket');
+      const { ticketIdentifier, organizationId }: CheckInPayload = req.body;
+
+      if (!ticketIdentifier || !organizationId) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing Enough Info to check the ticket',
+          error: 'Missing Enough Info to check the ticket',
+        });
+      }
+
+      const ticket = await prisma.ticket.findUnique({
+        where: { identifier: ticketIdentifier },
+        include: {
+          event: {
+            select: {
+              organization: {
+                select: {
+                  id: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!ticket) {
+        return res.status(404).json({
+          success: false,
+          message: 'Ticket not found',
+          error: 'Ticket does not exist',
+        });
+      }
+      if (ticket.checkedIn == true) {
+        return res.status(400).json({
+          success: false,
+          message: 'Ticket already checked in',
+          error: 'Ticket already checked in',
+        });
+      }
+
+      if (ticket.event.organization.id !== organizationId) {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not authorized to check for this ticket!',
+          error: 'You are not authorized to check for this ticket!',
+        });
+      }
+
+      await prisma.ticket.update({
+        where: { id: ticket.id },
+        data: { checkedIn: true },
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: 'Ticket checked in successfully',
+        checkedIn: true,
+      });
+    } catch (error) {
+      console.error('Error checking in ticket:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Connection Error or Internal Server Error',
+        error: 'Connection Error or Internal Server Error',
       });
     }
   }

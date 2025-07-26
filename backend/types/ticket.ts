@@ -19,6 +19,7 @@ export interface TicketResponse {
   ticketId?: string;
   ticket?: TicketDTO;
   tickets?: TicketDTO[];
+  checkedIn?: boolean;
 }
 
 export interface TicketDTO extends CreateTicketBody {
@@ -29,4 +30,10 @@ export interface TicketDTO extends CreateTicketBody {
   checkedIn: boolean;
   event: EventDTO;
   createdAt: Date;
+}
+
+export interface CheckInPayload {
+  ticketIdentifier: string;
+  qrCode?: string;
+  organizationId: string;
 }
