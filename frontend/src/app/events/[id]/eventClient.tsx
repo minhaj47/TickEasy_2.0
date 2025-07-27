@@ -4,7 +4,6 @@ import ErrorDisplay from "@/app/error";
 import LoadingIndicator from "@/app/loading";
 import { useToast } from "@/app/toast";
 import {
-  AlertTriangle,
   ArrowLeft,
   Clock,
   ExternalLink,
@@ -50,9 +49,8 @@ export default function EventDetailsPage() {
     paymentMethod: "",
     paymentId: "",
     isMale: undefined,
-    isSustian: true,
+    isSustian: undefined,
   });
-  const [registrationNumber, setRegistrationNumber] = useState<string>("");
   const router = useRouter();
   useEffect(() => {
     const fetchEvent = async (): Promise<void> => {
@@ -140,14 +138,12 @@ export default function EventDetailsPage() {
       errors.paymentId = "Payment ID is required for online payments";
     }
 
-    // gojamil
-
-    if (!registrationNumber.trim()) {
-      errors.buyerPhone = "Registration number is required";
-    }
-
     if (formData.isMale === undefined) {
       errors.isMale = true;
+    }
+
+    if (formData.isSustian === undefined) {
+      errors.isSustian = true;
     }
 
     setFormErrors(errors);
@@ -201,7 +197,7 @@ export default function EventDetailsPage() {
         paymentId: formData.paymentId,
         userId: info?.id,
         isMale: formData.isMale,
-        isSustian: true,
+        isSustian: formData.isSustian,
       };
 
       const response = await fetch(
@@ -234,7 +230,7 @@ export default function EventDetailsPage() {
         paymentMethod: "",
         paymentId: "",
         isMale: undefined,
-        isSustian: true,
+        isSustian: undefined,
       });
     } catch (err) {
       console.error("Registration failed:", err);
@@ -391,7 +387,7 @@ export default function EventDetailsPage() {
                         <MapPin className="w-5 h-5 mr-2 text-violet-600" />
                         <span>{event.location || "Location TBD"}</span>
                       </div>
-                      {/* <div className="flex  items-center text-gray-600">
+                      <div className="flex  items-center text-gray-600">
                         <Ticket className="w-5 h-5 mr-2 text-violet-600" />
                         <span className="font-semibold text-indigo-600">
                           {event.ticketPrice
@@ -399,22 +395,9 @@ export default function EventDetailsPage() {
                             : "Free"}{" "}
                           (Non-SUSTian)
                         </span>
-                      </div> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="mt-6 mb-6 p-4 bg-red-50 rounded-xl border border-red-100 flex items-center gap-4">
-                  <AlertTriangle className="w-10 h-10 text-red-600" />
-                  {/* <h4 className="font-semibold text-red-800 mb-2">
-                    Limited Seats for our Non-Sustian Brothers and Sisters have
-                    been filled up. We can&apos;t take any more registrations.
-                  </h4> */}
-                  <h4 className="font-semibold text-red-800 mb-2">
-                    নন-সাস্টিয়ান ভাইদের জন্য বরাদ্দ সীমিত সিট পূর্ণ হয়ে গেছে।
-                    আমরা আন্তরিকভাবে দুঃখিত, এখন আর রেজিস্ট্রেশন নেওয়া সম্ভব নয়।
-                    আফওয়ান। সাস্টিয়ানরা রেজিস্ট্রেশন করতে ফর্ম পূরণ করুন।
-                  </h4>
                 </div>
 
                 {/* Description */}
@@ -694,18 +677,6 @@ export default function EventDetailsPage() {
                 </div>
               </div>
 
-              <div className="p-4 mb-5 bg-red-50 rounded-xl border border-red-100 flex items-center gap-4">
-                <AlertTriangle className="w-10 h-10 text-red-600" />
-                {/* <h4 className="font-semibold text-red-800 mb-2">
-                    Limited Seats for our Non-Sustian Brothers and Sisters have
-                    been filled up. We can&apos;t take any more registrations.
-                  </h4> */}
-                <p className="font-semibold text-red-800 ">
-                  নন-সাস্টিয়ান ভাইদের জন্য বরাদ্দ সীমিত সিট পূর্ণ হয়ে গেছে।
-                  সাস্টিয়ানরা রেজিস্ট্রেশন করতে ফর্ম পূরণ করুন।
-                </p>
-              </div>
-
               {/* Registration Form */}
               <form
                 onSubmit={(e) => {
@@ -789,34 +760,6 @@ export default function EventDetailsPage() {
                   />
                 </div>
 
-                {/* Dummy Reg */}
-                <div>
-                  <label
-                    htmlFor="registrationNumber"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Registration Number *
-                  </label>
-                  <input
-                    type="text"
-                    id="registrationNumber"
-                    name="registrationNumber"
-                    value={registrationNumber}
-                    onChange={(e) => setRegistrationNumber(e.target.value)}
-                    className={`w-full px-4 py-3 text-black border rounded-xl focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-colors ${
-                      formErrors.buyerPhone
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    }`}
-                    placeholder="Enter your full name"
-                  />
-                  {formErrors.buyerPhone && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {formErrors.buyerPhone}
-                    </p>
-                  )}
-                </div>
-
                 {/* Gender Field */}
                 <div>
                   <label
@@ -864,7 +807,7 @@ export default function EventDetailsPage() {
                 </div>
 
                 {/* SUST Student Field */}
-                {/* <div>
+                <div>
                   <label
                     htmlFor="isSUSTian"
                     className="block text-sm font-medium text-gray-700 mb-1"
@@ -909,7 +852,7 @@ export default function EventDetailsPage() {
                       </svg>
                     </div>
                   </div>
-                </div> */}
+                </div>
 
                 {/* Payment Method */}
                 {event.ticketPrice && event.ticketPrice > 0 && (
