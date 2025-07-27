@@ -8,19 +8,14 @@ const app = express();
 const port = 5001;
 
 // middleware
-// app.use(
-//   cors({
-//     origin: [
-//       'http://localhost:3000',
-//       'https://event-grid-2-0-git-main-md-minhajul-haques-projects.vercel.app',
-//       'https://event-grid-2-0.vercel.app',
-//       'https://event-grid-2-0-git-ikss-version-md-minhajul-haques-projects.vercel.app',
-//     ],
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'https://event-grid-2-0.vercel.app'],
+    credentials: true,
+  })
+);
 
-app.use(cors());
+// app.use(cors());
 
 app.use(express.json());
 
