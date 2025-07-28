@@ -290,7 +290,8 @@ export default function EventDetailsPage() {
   const startTime: string = formatTime(event.startTime);
   const endTime: string = formatTime(event.endTime);
   const availableSeats: number = event.maxTickets - event.ticketCount;
-  const isFullyBooked: boolean = availableSeats <= 0;
+  // const isFullyBooked: boolean = availableSeats <= 0;
+  const isFullyBooked: boolean = true;
 
   return (
     <div className="min-h-screen bg-gray-50">
