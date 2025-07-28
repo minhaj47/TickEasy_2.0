@@ -1,9 +1,8 @@
-# tickEasy - Your Event, Our Responsibility
+# TickEasy_2.0 - Your Event, Our Responsibility
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://event-grid-2-0.vercel.app)
 [![Flutter App](https://img.shields.io/badge/Flutter-Check%20App-blue)](https://github.com/minhaj47/tick_easy_check_easy_2_0)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
+[![License](https://img.shields.io/badge/License-Proprietary-red.svg)]()
 A comprehensive event ticketing and management platform designed to handle real-world events with enterprise-level performance. Successfully processed 1000+ attendees in 1-1.5 hours with 100% success rate across multiple live events.
 
 ## 🌟 Live Demo
@@ -25,15 +24,15 @@ Password: [DEMO_ORG_PASSWORD]
 
 ### For Event Attendees
 - **Instant Booking**: Purchase tickets without registration
-- **Multiple Payment Methods**: bKash, Nagad, Upay, Visa, Mastercard support
-- **Instant Delivery**: Tickets via email or WhatsApp
-- **Tickipass**: QR code-based mobile ticket access
+- **Multiple Payment Methods**: bKash, Nagad, Rocket, Cellfin, Upay, Visa, Mastercard support(Updratation ongoing)
+- **Instant Delivery**: Tickets via email
+- **Tickipass**: QR code-based mobile ticket access and access control
 - **User Dashboard**: Manage all purchased tickets
 
 ### For Event Organizers
 - **Event Creation & Management**: Full control over event details
 - **Real-time Analytics**: Sales reports and attendance tracking
-- **Efficient Check-in**: Integrated scanning system
+- **Efficient Check-in**: Integrated QR scanning system (Mobile App)
 - **Organization Dashboard**: Comprehensive event oversight
 - **Attendee Management**: Complete participant tracking
 
@@ -53,7 +52,7 @@ Password: [DEMO_ORG_PASSWORD]
 
 ### Backend
 - **Node.js** (TypeScript)
-- **Express.js** REST API
+- **Express.js** REST API (Optimazation ongoing) 
 - **JWT** Authentication
 - **BCrypt** Password hashing
 
@@ -74,65 +73,13 @@ Password: [DEMO_ORG_PASSWORD]
 
 ### Performance Metrics
 - **Events Handled**: 2+ major events
-- **Total Attendees**: 1000-1200 participants
+- **Total Attendees per Events**: 1000-1200 participants
 - **Processing Time**: 1-1.5 hours per event
 - **Success Rate**: 100%
 - **Manual Alternative**: Impossible at this scale
 
 ### Problem Solved
 Traditional manual event management becomes impossible at scale. tickEasy transforms chaotic event check-ins into streamlined, efficient processes, saving organizers countless hours while providing attendees with a seamless experience.
-
-## 🛠️ Installation & Setup
-
-### Prerequisites
-- Node.js (v18+)
-- PostgreSQL database
-- Git
-
-### Environment Variables
-Create `.env` files in both frontend and backend directories:
-
-#### Backend (.env)
-```env
-DATABASE_URL="your_neon_postgres_connection_string"
-JWT_SECRET="your_jwt_secret"
-BCRYPT_ROUNDS=12
-PORT=5000
-```
-
-#### Frontend (.env.local)
-```env
-NEXT_PUBLIC_API_URL="your_backend_url"
-NEXT_PUBLIC_APP_URL="your_frontend_url"
-```
-
-### Installation Steps
-
-1. **Clone the repository**
-   ```bash
-   git clone [YOUR_REPO_URL]
-   cd tickeasy
-   ```
-
-2. **Backend Setup**
-   ```bash
-   cd backend
-   npm install
-   npx prisma generate
-   npx prisma db push
-   npm run dev
-   ```
-
-3. **Frontend Setup**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-
-4. **Access the application**
-   - Frontend: `http://localhost:3000`
-   - Backend API: `http://localhost:5000`
 
 ## 🏗️ Repository Structure
 
@@ -157,20 +104,12 @@ The companion Flutter application handles on-site ticket verification and check-
 
 **Repository**: [tick_easy_check_easy_2_0](https://github.com/minhaj47/tick_easy_check_easy_2_0)
 
-## 🔄 Development Workflow
-
-- **Branching Strategy**: Feature-based Git branching
-- **Code Quality**: TypeScript for type safety
-- **Database**: Prisma for type-safe database operations
-- **Authentication**: JWT-based secure sessions
-
 ## 🚀 Future Roadmap
 
 - [ ] **Monorepo Migration**: Consolidate codebase for better type sharing
 - [ ] **Payment Gateway Integration**: Complete payment processing implementation
 - [ ] **Email Service Integration**: Automated notification system
 - [ ] **Advanced Analytics**: Enhanced reporting capabilities
-- [ ] **Mobile App Integration**: Deeper Flutter app connectivity
 
 ## 🎯 Business Model
 
@@ -187,14 +126,6 @@ This entire platform was conceptualized, designed, and built by a single develop
 - **Testing and Quality Assurance**
 - **User Feedback Integration**
 - **Production Deployment**
-
-## 🤝 Contributing
-
-This project welcomes contributions from developers interested in event management technology. Please feel free to submit issues, feature requests, or pull requests.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 📞 Contact
 
