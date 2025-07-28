@@ -1,5 +1,6 @@
 "use client";
 
+import TickEasyLogo from "@/app/components/Logo";
 import LoadingIndicator from "@/app/loading";
 import {
   Calendar,
@@ -165,6 +166,10 @@ export default function TicketPage() {
           ref={printRef}
           className="bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden print-container"
         >
+          {/* TickEasy Branding */}
+          <div className="flex flex-col items-center py-6 bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 print:bg-white">
+            <TickEasyLogo size="small" showTagline />
+          </div>
           {/* Header Section */}
           <div className="relative print-header">
             <img
