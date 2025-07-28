@@ -204,7 +204,9 @@ export default function EventDetailsPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/api/tickets/${eventId}`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(ticketData),
         }
       );
